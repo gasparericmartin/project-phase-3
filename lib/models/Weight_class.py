@@ -29,3 +29,14 @@ class Weight_class:
     @name.setter
     def name(self, name):
         self._name = name
+    
+    @classmethod
+    def create_table(cls):
+        sql = """
+            CREATE TABLE IF NOT EXISTS weight_classes (
+            id INTEGER PRIMARY KEY,
+            weight INTEGER,
+            name TEXT)
+        """
+        CURSOR.execute(sql)
+        CONN.commit()
