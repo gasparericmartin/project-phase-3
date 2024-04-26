@@ -22,7 +22,8 @@ class Fighter:
               f'Age: {self.age}' + \
               f'Weight class: {self.weight_class}' + \
               f'Wins: {self.wins}' + \
-              f'Losses: {self.losses}'
+              f'Losses: {self.losses}' + \
+              f'id: {self.id}'
               )
     
     @property
