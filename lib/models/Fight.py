@@ -19,10 +19,10 @@ class Fight:
     
     def __repr__(self):
         print(
-            f'Fight date: {self.date}' + \
-            f'Fighter 1: {self.ftr_1}' + \
-            f'Fighter 2: {self.ftr_2}' + \
-            f'Winner: {self.winner}' + \
+            f'Fight date: {self.date}, ' + \
+            f'Fighter 1: {self.ftr_1}, ' + \
+            f'Fighter 2: {self.ftr_2}, ' + \
+            f'Winner: {self.winner}, ' + \
             f'id: {self.id}'
         )
     
