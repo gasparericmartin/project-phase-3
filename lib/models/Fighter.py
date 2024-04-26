@@ -21,11 +21,11 @@ class Fighter:
     
     def __repr__(self):
         print(
-              f'Fighter name: {self.name}' + \
-              f'Age: {self.age}' + \
-              f'Weight class: {self.weight_class}' + \
-              f'Wins: {self.wins}' + \
-              f'Losses: {self.losses}' + \
+              f'Fighter name: {self.name}, ' + \
+              f'Age: {self.age}, ' + \
+              f'Weight class: {self.weight_class}, ' + \
+              f'Wins: {self.wins}, ' + \
+              f'Losses: {self.losses}, ' + \
               f'id: {self.id}'
               )
     
