@@ -21,3 +21,11 @@ class Fight:
             f'Winner: {self.winner}' + \
             f'id: {self.id}'
         )
+    
+    @property
+    def date(self):
+        return self._date
+    
+    @date.setter
+    def date(self, date):
+        self._date = date
