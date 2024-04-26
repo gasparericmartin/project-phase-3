@@ -1,5 +1,7 @@
 class Fight:
 
+    all = {}
+
     def __init__(
             self, 
             date, 

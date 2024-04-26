@@ -1,5 +1,6 @@
 class Weight_class:
-    
+
+    all = {}
     
     def __init__(self, weight, name, id = None):
         self.weight = weight
