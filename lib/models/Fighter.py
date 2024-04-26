@@ -7,12 +7,14 @@ class Fighter:
             age, 
             weight_class = None, 
             wins = 0, 
-            losses = 0):
+            losses = 0,
+            id = None):
         self.name = name
         self.age = age
         self.weight_class = weight_class
         self.wins = wins
         self.losses = losses
+        self.id = id
     
     def __repr__(self):
         print(
