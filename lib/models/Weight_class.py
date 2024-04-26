@@ -9,10 +9,10 @@ class Weight_class:
         self.name = name
         self.id = id
     
-    def __repr__(self):
-        print(f'Class weight limit: {self.weight}lbs' + \
-              f'Class name: {self.name}' + \
-                 f'Class id: {self.id}')
+    def __repr__(self): 
+            print(f'Class weight limit: {self.weight}lbs, ' + \
+                f'Class name: {self.name}, ' + \
+                    f'Class id: {str(self.id)}')
 
     @property
     def weight(self):
