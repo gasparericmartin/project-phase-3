@@ -40,3 +40,41 @@ class Weight_class:
         """
         CURSOR.execute(sql)
         CONN.commit()
+    
+    @classmethod
+    def drop_table(cls):
+        sql = """
+            DROP TABLE IF EXISTS weight_classes
+        """
+        CURSOR.execute(sql)
+        CONN.commit()
+    
+    def save(self):
+        sql = """
+            INSERT INTO weight_classes (weight, name)
+            VALUES (?, ?)
+        """
+
+        CURSOR.execute(sql, (self.weight, self.name))
+        CONN.commit()
+
+        self.id = CURSOR.lastrowid
+        type(self).all[self.id] = self
+    
+    def update(self):
+        sql = """
+            UPDATE weight_classes
+            SET weight = ?, name = ?
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.weight_class, self.name, self.id))
+        CONN.commit()
+    
+    def delete(self):
+        sql = """
+            DELETE FROM weight_classes 
+            WHERE id = ? 
+        """
+        CURSOR.execute(sql, (self.id))
+        CONN.commit()
+    
