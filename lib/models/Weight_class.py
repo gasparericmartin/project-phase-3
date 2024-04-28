@@ -78,3 +78,22 @@ class Weight_class:
         CURSOR.execute(sql, (self.id))
         CONN.commit()
     
+    @classmethod
+    def create(cls, weight, name):
+        weight_class = cls(weight, name)
+        weight_class.save()
+        return weight_class
+    
+    @classmethod
+    def instance_from_db(cls, row):
+
+        weight_class = cls.all.get(row[0])
+        if weight_class:
+            weight_class.weight = row[1]
+            weight_class.name = row[2]
+        else:
+            weight_class = cls(row[1], row[2])
+            weight_class.id = row[0]
+            cls.all[weight_class.id] = weight_class
+        return weight_class
+
