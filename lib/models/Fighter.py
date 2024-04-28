@@ -12,12 +12,13 @@ class Fighter:
             wins = 0, 
             losses = 0,
             id = None):
+        self.id = id
         self.name = name
         self.age = age
         self.weight_class = weight_class
         self.wins = wins
         self.losses = losses
-        self.id = id
+        
     
     def __repr__(self):
         print(
@@ -64,4 +65,96 @@ class Fighter:
             losses INTEGER,
             FOREIGN KEY (weight_class) REFERENCES weight_classes(id))
         """
+        CURSOR.execute(sql)
+        CONN.commit()
+
+    @classmethod
+    def drop_table(cls):
+        sql = """
+            DROP TABLE IF EXISTS fighters
+        """
+        CURSOR.execute(sql)
+        CONN.commit()
+    
+    def save(self):
+        sql = """
+            INSERT INTO fighters (name, age, wins, losses, weight_class)
+            VALUES (?, ?, ?, ?)
+        """
+        CURSOR.execute(sql, (self.name, self.age, self.wins, self.losses, self.weight_class))
+        CONN.commit()
+
+        self.id = CURSOR.lastrowid
+        type(self).all[self.id] = self
+    
+    def update(self):
+        sql = """
+            UPDATE fighters
+            SET name = ?, age = ?, wins = ?, losses = ?, weight_class = ?
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.name, self.age, self.wins,
+                            self.losses, self.weight_class))
+        CONN.commit()
+    
+    def delete(self):
+        sql = """
+            DELETE FROM fighters
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.id,))
+        CONN.commit()
+
+        del type(self).all[self.id]
+        self.id = None
+
+    @classmethod
+    def create(cls, name, age, wins, losses, weight_class):
+        fighter = cls(name, age, wins, losses, weight_class)
+        fighter.save()
+        return fighter
+
+    @classmethod
+    def instance_from_db(cls, row):
+        fighter = cls.all.get(row[0])
+        if fighter:
+            fighter.name = row[1]
+            fighter.age = row[2]
+            fighter.wins = row[3]
+            fighter.losses = row[4]
+            fighter.weight_class = row[5]
+        else:
+            fighter = cls(row[1], row[2], row[3], row[4], row[5])
+            fighter.id = row[0]
+            cls.all[fighter.id] = fighter
+        return fighter
+    
+    @classmethod
+    def get_all(cls):
+        sql = """
+            SELECT *
+            FROM fighters
+        """
+        rows = CURSOR.execute(sql).fetchall()
+        return [cls.instance_from_db(row) for row in rows]
+    
+    def find_by_id(cls, id):
+        sql = """
+            SELECT *
+            FROM fighters
+            WHERE id = ?
+        """
+        row = CURSOR.execute(sql, (id,)).fetchone()
+        return cls.instance_from_db(row) if row else None
+    
+    def find_by_name(cls, name):
+        sql = """
+            SELECT *
+            FROM fighters
+            WHERE name = ?
+        """
+        row = CURSOR.execute(sql, (name,)).fetchone()
+        return cls.instance_from_db(row) if row else None
+
+     
     
