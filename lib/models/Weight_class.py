@@ -5,9 +5,10 @@ class Weight_class:
     all = {}
     
     def __init__(self, weight, name, id = None):
+        self.id = id
         self.weight = weight
         self.name = name
-        self.id = id
+        
     
     def __repr__(self): 
         return f'Class weight limit: {str(self.weight)}lbs, ' + \
