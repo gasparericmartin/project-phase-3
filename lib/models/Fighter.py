@@ -53,3 +53,15 @@ class Fighter:
     def weight_class(self, weight_class):
         self._weight_class = weight_class
     
+    @classmethod
+    def create_table(cls):
+        sql = """
+            CREATE TABLE IF NOT EXISTS fighters (
+            id INTEGER PRIMARY KEY,
+            name TEXT,
+            age INTEGER,
+            wins INTEGER,
+            losses INTEGER,
+            FOREIGN KEY (weight_class) REFERENCES weight_classes(id))
+        """
+    

@@ -67,7 +67,7 @@ class Weight_class:
             SET weight = ?, name = ?
             WHERE id = ?
         """
-        CURSOR.execute(sql, (self.weight_class, self.name, self.id))
+        CURSOR.execute(sql, (self.weight, self.name, self.id))
         CONN.commit()
     
     def delete(self):
