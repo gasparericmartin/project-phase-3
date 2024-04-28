@@ -10,9 +10,9 @@ class Weight_class:
         self.id = id
     
     def __repr__(self): 
-            print(f'Class weight limit: {self.weight}lbs, ' + \
-                f'Class name: {self.name}, ' + \
-                    f'Class id: {str(self.id)}')
+        return f'Class weight limit: {str(self.weight)}lbs, ' + \
+        f'Class name: {str(self.name)}, ' + \
+        f'Class id: {str(self.id)}'
 
     @property
     def weight(self):
@@ -96,4 +96,38 @@ class Weight_class:
             weight_class.id = row[0]
             cls.all[weight_class.id] = weight_class
         return weight_class
+    
+    @classmethod
+    def get_all(cls):
+        sql = """
+            SELECT *
+            FROM weight_classes
+        """
+
+        rows = CURSOR.execute(sql).fetchall()
+
+        return [cls.instance_from_db(row) for row in rows]
+    
+    @classmethod
+    def find_by_id(cls, id):
+        sql = """
+        SELECT *
+        FROM weight_classes
+        WHERE id = ?
+        """
+
+        row = CURSOR.execute(sql, (id,)).fetchone()
+        return cls.instance_from_db(row) if row else None
+
+    @classmethod
+    def find_by_weight(cls, weight):
+        sql = """
+            SELECT * 
+            FROM weight_classes
+            WHERE weight is ?
+        """
+
+        row = CURSOR.execute(sql, (weight,)).fetchone()
+        return cls.instance_from_db(row) if row else None
+    
 
