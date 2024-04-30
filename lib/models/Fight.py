@@ -11,11 +11,11 @@ class Fight:
             ftr_2 = None, 
             winner = None, 
             id = None):
-        self.id = id
         self.date = date
         self.ftr_1 = ftr_1
         self.ftr_2 = ftr_2
         self.winner = winner
+        self.id = id
         
     
     def __repr__(self):
@@ -90,7 +90,7 @@ class Fight:
         self.id = None
     
     @classmethod
-    def create(cls, date, ftr_1, ftr_2, winner):
+    def create(cls, date, ftr_1=None, ftr_2=None, winner=None):
         fight = cls(date, ftr_1, ftr_2, winner)
         fight.save()
         return fight
