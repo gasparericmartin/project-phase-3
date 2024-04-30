@@ -79,10 +79,10 @@ class Fighter:
     
     def save(self):
         sql = """
-            INSERT INTO fighters (name, age, wins, losses, weight_class)
+            INSERT INTO fighters (name, age, weight_class, wins, losses)
             VALUES (?, ?, ?, ?, ?)
         """
-        CURSOR.execute(sql, (self.name, self.age, self.wins, self.losses, self.weight_class))
+        CURSOR.execute(sql, (self.name, self.age, self.weight_class, self.wins, self.losses))
         CONN.commit()
 
         self.id = CURSOR.lastrowid
@@ -187,9 +187,7 @@ class Fighter:
         """
         rows = CURSOR.execute(sql, (self.id,)).fetchall()
         return [Fight.instance_from_db(row) for row in rows]
-    
-    def sample(self):
-        print(self.id)
+
 
 
         
