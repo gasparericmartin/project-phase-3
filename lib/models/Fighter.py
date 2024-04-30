@@ -121,9 +121,10 @@ class Fighter:
         if fighter:
             fighter.name = row[1]
             fighter.age = row[2]
-            fighter.wins = row[3]
-            fighter.losses = row[4]
-            fighter.weight_class = row[5]
+            fighter.weight_class = row[3]
+            fighter.wins = row[4]
+            fighter.losses = row[5]
+
         else:
             fighter = cls(row[1], row[2], row[3], row[4], row[5])
             fighter.id = row[0]
