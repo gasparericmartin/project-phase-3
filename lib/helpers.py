@@ -16,8 +16,7 @@ def fighters_in_class(weight):
     weight_class = Weight_class.find_by_weight(weight)
     fighters = Fighter.find_by_weight_class(weight_class.id)
     
-    # [display_fighter_info(fighter) for fighter in fighters]
-    for fighter in fighters:
-        display_fighter_info(fighter)
+    [display_fighter_info(fighter) for fighter in fighters]
+
 
 
