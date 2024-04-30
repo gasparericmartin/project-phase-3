@@ -1,4 +1,5 @@
 from models.__init__ import CURSOR, CONN
+from models.Fight import Fight
 
 class Fighter:
 
@@ -21,14 +22,13 @@ class Fighter:
         
     
     def __repr__(self):
-        print(
-              f'Fighter name: {self.name}, ' + \
-              f'Age: {self.age}, ' + \
-              f'Weight class: {self.weight_class}, ' + \
-              f'Wins: {self.wins}, ' + \
-              f'Losses: {self.losses}, ' + \
-              f'id: {self.id}'
-              )
+        return f'Fighter name: {self.name}, ' + \
+               f'Age: {self.age}, ' + \
+               f'Weight class: {self.weight_class}, ' + \
+               f'Wins: {self.wins}, ' + \
+               f'Losses: {self.losses}, ' + \
+               f'id: {self.id}'
+              
     
     @property
     def name(self):
@@ -61,6 +61,7 @@ class Fighter:
             id INTEGER PRIMARY KEY,
             name TEXT,
             age INTEGER,
+            weight_class INTEGER,
             wins INTEGER,
             losses INTEGER,
             FOREIGN KEY (weight_class) REFERENCES weight_classes(id))
@@ -79,7 +80,7 @@ class Fighter:
     def save(self):
         sql = """
             INSERT INTO fighters (name, age, wins, losses, weight_class)
-            VALUES (?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?)
         """
         CURSOR.execute(sql, (self.name, self.age, self.wins, self.losses, self.weight_class))
         CONN.commit()
@@ -109,8 +110,8 @@ class Fighter:
         self.id = None
 
     @classmethod
-    def create(cls, name, age, wins, losses, weight_class):
-        fighter = cls(name, age, wins, losses, weight_class)
+    def create(cls, name, age, weight_class, wins, losses):
+        fighter = cls(name, age, weight_class, wins, losses)
         fighter.save()
         return fighter
 
@@ -138,6 +139,7 @@ class Fighter:
         rows = CURSOR.execute(sql).fetchall()
         return [cls.instance_from_db(row) for row in rows]
     
+    @classmethod
     def find_by_id(cls, id):
         sql = """
             SELECT *
@@ -147,6 +149,7 @@ class Fighter:
         row = CURSOR.execute(sql, (id,)).fetchone()
         return cls.instance_from_db(row) if row else None
     
+    @classmethod
     def find_by_name(cls, name):
         sql = """
             SELECT *
@@ -155,6 +158,40 @@ class Fighter:
         """
         row = CURSOR.execute(sql, (name,)).fetchone()
         return cls.instance_from_db(row) if row else None
+    
+    @classmethod
+    def find_by_weight_class(cls, weight_class_id):
+        sql = """
+            SELECT *
+            FROM fighters
+            WHERE weight_class = ?
+        """
+        rows = CURSOR.execute(sql, (weight_class_id,)).fetchall()
+        return [cls.instance_from_db(row) for row in rows]
+    
+    def all_fights(self):
+        sql = """
+            SELECT *
+            FROM fights
+            WHERE ftr_1 = ? OR ftr_2 = ?
+        """
 
+        rows = CURSOR.execute(sql, (self.id, self.id)).fetchall()
+        return [Fight.instance_from_db(row) for row in rows]
+    
+    def all_wins(self):
+        sql = """
+            SELECT *
+            FROM fights
+            WHERE winner = ?
+        """
+        rows = CURSOR.execute(sql, (self.id,)).fetchall()
+        return [Fight.instance_from_db(row) for row in rows]
+    
+    def sample(self):
+        print(self.id)
+
+
+        
      
     
