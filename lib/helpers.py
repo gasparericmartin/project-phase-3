@@ -19,22 +19,49 @@ def display_fighter_info(fighter):
             f'Losses: {fighter.losses}\n')
 
 def all_fighters():
-    pass
+    fighters = Fighter.get_all()
+    [display_fighter_info(fighter) for fighter in fighters]
 
 def fighter_by_name(name):
-    pass
+    try:
+        fighter = Fighter.find_by_name(name)
+        display_fighter_info(fighter)
+    except Exception as exc:
+        print('There was an error: ', exc)
 
 def fighter_opponents(fighter):
     pass
 
+def display_fight_info(fight):
+    fighter_1 = Fighter.find_by_id(fight.ftr_1).name
+    fighter_2 = Fighter.find_by_id(fight.ftr_2).name
+    winner = Fighter.find_by_id(fight.winner).name if fight.winner else None
+    
+    if fighter_1 == winner:
+        print(f'Date: {fight.date}\n' +\
+                f'Fighter 1: {fighter_1} *WINNER* \n' +\
+                f'Fighter 2: {fighter_2}\n')
+    elif fighter_2 == winner: 
+        print(f'Date: {fight.date}\n' +\
+            f'Fighter 1: {fighter_1}\n' +\
+            f'Fighter 2: {fighter_2} *WINNER*\n')
+    else:
+        print(f'Date: {fight.date}\n' +\
+            f'Fighter 1: {fighter_1}\n' +\
+            f'Fighter 2: {fighter_2}\n' +\
+            f'Winner: Everybody loses\n')
+    
+    
+
 def all_fights():
-    pass
+    fights = Fight.get_all()
+    [display_fight_info(fight) for fight in fights]
 
 def fights_by_date(date):
     pass
 
 def fights_by_fighter(fighter):
-    #use fithter name or instance?
+    #use fighter name or instance?
     pass
 
 
