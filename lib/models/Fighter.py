@@ -13,12 +13,12 @@ class Fighter:
             wins = 0, 
             losses = 0,
             id = None):
-        self.id = id
         self.name = name
         self.age = age
         self.weight_class = weight_class
         self.wins = wins
         self.losses = losses
+        self.id = id
         
     
     def __repr__(self):
@@ -110,7 +110,7 @@ class Fighter:
         self.id = None
 
     @classmethod
-    def create(cls, name, age, weight_class, wins, losses):
+    def create(cls, name, age, weight_class=None, wins=0, losses=0):
         fighter = cls(name, age, weight_class, wins, losses)
         fighter.save()
         return fighter
