@@ -137,7 +137,7 @@ class Fight:
             FROM fights
             WHERE date = ?
         """
-        row = CURSOR.execute(sql, (date,)).fetchone()
-        return cls.instance_from_db(row) if row else None
+        row = CURSOR.execute(sql, (date,)).fetchall()
+        return [cls.instance_from_db(row) if row else None]
     
 
