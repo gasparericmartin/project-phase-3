@@ -1,28 +1,48 @@
 # lib/cli.py
 
-from helpers import (
-    exit_program,
-    helper_1
-)
+import inquirer
+from helpers import *
 
+main_menu = [
+    inquirer.List('choice',
+                  message='Make a selection',
+                  choices=['weight classes', 'fighters', 'fights'])
+
+]
+
+weight_classes = [
+    inquirer.List('choice',
+                    message='Make a selection',
+                    choices=['display all classes', 'Search by weight', 'back',
+                            'add weight class' ])
+]
+
+fighters = [
+    inquirer.List('choice',
+                    message='Make a selection',
+                    choices=['Search by name', 'view all fighters', 'back'])
+]
 
 def main():
     while True:
-        menu()
-        choice = input("> ")
-        if choice == "0":
-            exit_program()
-        elif choice == "1":
-            helper_1()
+        user_choice = inquirer.prompt(main_menu)['choice']
+        print(user_choice)
+        if user_choice == 'weight classes':
+            user_choice = inquirer.prompt(weight_classes)['choice']
+            if user_choice == 'back':
+                print('return to main menu')
+            elif user_choice == 'display all classes':
+                print('displayed')
+        elif user_choice == 'fighters':
+            user_choice = inquirer.prompt(fighters)['choice']
+            if user_choice == 'Search by name':
+                print('Searched by name')
+            elif user_choice == 'back':
+                print('back to main menu')
         else:
-            print("Invalid choice")
+            exit()
+    
 
 
-def menu():
-    print("Please select an option:")
-    print("0. Exit the program")
-    print("1. Some useful function")
-
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
