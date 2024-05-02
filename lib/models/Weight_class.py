@@ -134,3 +134,14 @@ class Weight_class:
     
     def all_fighters_in_class(self):
         print(Fighter.find_by_weight_class(self.id))
+    
+    @classmethod
+    def find_by_name(cls, name):
+        sql = """
+            SELECT *
+            FROM weight_classes
+            WHERE name = ?
+        """
+
+        row = CURSOR.execute(sql, (name,)).fetchone()
+        return cls.instance_from_db(row) if row else None
