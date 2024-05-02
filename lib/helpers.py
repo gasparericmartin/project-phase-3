@@ -5,6 +5,19 @@ from models.Fighter import Fighter
 from models.Weight_class import Weight_class
 import re
 
+def exit_program():
+    print('Exiting program')
+    exit()
+
+def display_class_info(weight_class):
+    print(f'Weight: {weight_class.weight}lbs\n' +\
+          f'Class Name: {weight_class.name}')
+
+def display_all_weight_classes():
+    weight_classes = Weight_class.get_all()
+
+    [display_class_info(weight_class) for weight_class in weight_classes]
+
 def fighters_in_class(weight):
     weight_class = Weight_class.find_by_weight(weight)
     fighters = Fighter.find_by_weight_class(weight_class.id)
@@ -175,8 +188,6 @@ def delete_fight(fight):
         print('Fight deleted')
     except Exception as exc:
         print('Error deleting fight: ', exc)
-
-
 
 
 
