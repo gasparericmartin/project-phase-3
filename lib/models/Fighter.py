@@ -91,11 +91,11 @@ class Fighter:
     def update(self):
         sql = """
             UPDATE fighters
-            SET name = ?, age = ?, wins = ?, losses = ?, weight_class = ?
+            SET name = ?, age = ?, weight_class = ?, wins = ?, losses = ?
             WHERE id = ?
         """
-        CURSOR.execute(sql, (self.name, self.age, self.wins,
-                            self.losses, self.weight_class))
+        CURSOR.execute(sql, (self.name, self.age, self.weight_class,
+                             self.wins, self.losses, self.id))
         CONN.commit()
     
     def delete(self):
