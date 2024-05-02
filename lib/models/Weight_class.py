@@ -77,7 +77,7 @@ class Weight_class:
             DELETE FROM weight_classes 
             WHERE id = ? 
         """
-        CURSOR.execute(sql, (self.id))
+        CURSOR.execute(sql, (self.id,))
         CONN.commit()
     
     @classmethod
@@ -134,5 +134,3 @@ class Weight_class:
     
     def all_fighters_in_class(self):
         print(Fighter.find_by_weight_class(self.id))
-    
-
