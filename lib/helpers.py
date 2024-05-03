@@ -107,6 +107,18 @@ def fights_by_fighter(fighter):
     fights = fighter.all_fights()
     [display_fight_info(fight) for fight in fights]
 
+def all_fight_info():
+    fights = Fight.get_all()
+    return_list = []
+    
+    for fight in fights:
+        return_list.append(f'Date: {fight.date}\n' +\
+                           f'Fighter 1: {fight.ftr_1}\n' +\
+                            f'Fighter 2: {fight.ftr_2}\n' +\
+                            f'Winner: {fight.winner}\n')
+    
+    return return_list
+
 def create_weight_class():
     weight_ = input('Input weight (number only): ')
     name_ = input('Input class name: ')
@@ -179,13 +191,8 @@ def create_fight(f1, f2, wnr):
     #Consider replacing with a "valid date" method for all date inputs
     #Would take a string as an argument to customize input prompt
     date_ = input('Enter date in 01/01/2001 format: ')
-    #Implement validation for fighter name in find_by_name method
-    #Consider replacing with function to both validate and return ID
-    #Would take a string as an argument to customize input prompt
     ftr_1_ = Fighter.find_by_name(f1).id
-
     ftr_2_ = Fighter.find_by_name(f2).id
-    
     winner_ = Fighter.find_by_name(wnr).id
 
     try:
