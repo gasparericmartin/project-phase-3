@@ -9,14 +9,27 @@ def exit_program():
     print('Exiting program')
     exit()
 
+def weight_class_names():
+    classes = Weight_class.get_all()
+    return [weight_class.name for weight_class in classes]
+
 def display_class_info(weight_class):
     print(f'Weight: {weight_class.weight}lbs\n' +\
-          f'Class Name: {weight_class.name}')
+          f'Class Name: {weight_class.name}\n')
 
 def display_all_weight_classes():
     weight_classes = Weight_class.get_all()
 
     [display_class_info(weight_class) for weight_class in weight_classes]
+
+def weight_class_by_weight(weight):
+    if re.match(r'[0-9]{3}', weight):
+        if weight_class := Weight_class.find_by_weight(weight):
+            display_class_info(weight_class)
+        else:
+            print('Weight class not found')
+    else:
+        raise TypeError('Input must be 3 consecutive numbers')
 
 def fighters_in_class(weight):
     weight_class = Weight_class.find_by_weight(weight)
@@ -37,11 +50,17 @@ def all_fighters():
     [display_fighter_info(fighter) for fighter in fighters]
 
 def fighter_by_name(name):
-    try:
-        fighter = Fighter.find_by_name(name)
-        display_fighter_info(fighter)
-    except Exception as exc:
-        print('There was an error: ', exc)
+    if fighter := Fighter.find_by_name(name):
+        try:
+            display_fighter_info(fighter)
+        except Exception as exc:
+            print('There was an error: ', exc)
+    else:
+        print('Fighter not found')
+
+def fighter_names():
+    fighters = Fighter.get_all()
+    return [fighter.name for fighter in fighters]
 
 def fighter_opponents(fighter):
     pass
@@ -66,9 +85,10 @@ def display_fight_info(fight):
             f'Winner: Everybody loses\n')
     
 def all_fights():
-    fights = Fight.get_all()
-    print(fights)
-    [display_fight_info(fight) for fight in fights]
+    #Very strange behavior, first call to Fight.get_all() returning none
+    #Will not function without first call
+    Fight.get_all()
+    [display_fight_info(fight) for fight in Fight.get_all()]
 
 def fights_by_date():
     pattern = re.compile('[0-9]{2}\/[0-9]{2}\/[0-9]{4}')
@@ -97,8 +117,10 @@ def create_weight_class():
     except Exception as exc:
         print('Error creating weight class', exc)
 
-def update_weight_class(weight):
-    if w_class := Weight_class.find_by_weight(weight):
+def update_weight_class(class_name):
+    if w_class := Weight_class.find_by_name(class_name):
+        print('Current weight class info : ')
+        display_class_info(w_class)
         try: 
             w_class.weight = input('Input new weight (number only): ')
             w_class.name = input('Input new name: ')
@@ -109,8 +131,8 @@ def update_weight_class(weight):
     else:
         print('Weight class not found')
 
-def delete_weight_class(weight):
-    if w_class := Weight_class.find_by_weight(weight):
+def delete_weight_class(class_name):
+    if w_class := Weight_class.find_by_name(class_name):
         try:
             w_class.delete()
             print('Weight class deleted')
@@ -153,16 +175,18 @@ def delete_fighter(fighter):
     except Exception as exc:
         print('Error deleting fighter: ', exc)
 
-def create_fight():
+def create_fight(f1, f2, wnr):
     #Consider replacing with a "valid date" method for all date inputs
     #Would take a string as an argument to customize input prompt
     date_ = input('Enter date in 01/01/2001 format: ')
     #Implement validation for fighter name in find_by_name method
     #Consider replacing with function to both validate and return ID
     #Would take a string as an argument to customize input prompt
-    ftr_1_ = Fighter.find_by_name(input('Input first fighter\'s name: ')).id
-    ftr_2_ = Fighter.find_by_name(input('Input second fighter\'s name: ')).id
-    winner_ = Fighter.find_by_name(input('Input winner\'s name: ')).id
+    ftr_1_ = Fighter.find_by_name(f1).id
+
+    ftr_2_ = Fighter.find_by_name(f2).id
+    
+    winner_ = Fighter.find_by_name(wnr).id
 
     try:
         Fight.create(date_, ftr_1_, ftr_2_, winner_)
