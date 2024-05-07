@@ -1,5 +1,6 @@
 from models.__init__ import CURSOR, CONN
 from models.Fighter import Fighter
+import re
 
 class Weight_class:
 
@@ -22,7 +23,10 @@ class Weight_class:
     
     @weight.setter
     def weight(self, weight):
-        self._weight = weight
+        if re.fullmatch(r'[0-9]?[0-9]{2}', weight):
+            self._weight = weight
+        else:
+            raise TypeError('Weights must be 2 or 3 digit integers')
     
     @property
     def name(self):
@@ -30,7 +34,10 @@ class Weight_class:
     
     @name.setter
     def name(self, name):
-        self._name = name
+        if re.fullmatch(r'[A-z]*[A-z]+weight', name):
+            self._name = name
+        else:
+            raise TypeError('Weight class name must be a string ending in \'weight\'')
     
     @classmethod
     def create_table(cls):
