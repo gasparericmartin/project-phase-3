@@ -24,21 +24,25 @@ class Weight_class:
     @weight.setter
     def weight(self, weight):
         
-        if re.fullmatch(r'[0-9]?[0-9]{2}', str(weight)):
-                self._weight = weight
-        else:
-            raise TypeError('Weights must be 2 or 3 digit integers')
-    
+        if not re.fullmatch(r'[0-9]?[0-9]{2}', str(weight)):
+            raise TypeError('Weights must be 2 or 3 digit integers') 
+        elif weight in [row.weight for row in type(self).all.values()]:
+            raise TypeError('Weight already exists')
+
+        self._weight = weight
     @property
     def name(self):
         return self._name 
     
     @name.setter
     def name(self, name):
-        if re.fullmatch(r'[A-z]*[A-z]+weight', name):
-            self._name = name
-        else:
+        if not re.fullmatch(r'[A-z]*[A-z]+weight', name):
             raise TypeError('Weight class name must be a string ending in \'weight\'')
+        elif name in [row.name for row in type(self).all.values()]:
+            raise TypeError('Name already exists')
+            
+        
+        self._name = name
     
     @classmethod
     def create_table(cls):
