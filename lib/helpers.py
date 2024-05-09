@@ -167,9 +167,18 @@ def update_weight_class(class_name):
     if w_class := Weight_class.find_by_name(class_name):
         print('Current weight class info : ')
         display_class_info(w_class)
+
+        weight_ = input('Input new weight (number only): ')
+        name_ = input('Input new name: ')
+        
         try: 
-            w_class.weight = input('Input new weight (number only): ')
-            w_class.name = input('Input new name: ')
+            if int(weight_) in weight_class_weights():
+                raise Exception('Weight already exists')
+            if name_ in weight_class_names():
+                raise Exception('Name already exists')
+
+            w_class.weight = weight_
+            w_class.name = name_
             w_class.update()
             print('Weight class successfully updated')
         except Exception as exc:
