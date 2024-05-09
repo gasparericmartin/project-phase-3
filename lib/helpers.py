@@ -5,10 +5,6 @@ from models.Fighter import Fighter
 from models.Weight_class import Weight_class
 import re
 
-# To do:
-# -Weight class duplicate name validation
-# -Weight class duplicate weight validation
-
 def exit_program():
     print('Exiting program')
     exit()
@@ -64,13 +60,11 @@ def all_fighters():
     [display_fighter_info(fighter) for fighter in fighters]
 
 def fighter_by_name(name):
-    if fighter := Fighter.find_by_name(name):
-        try:
-            display_fighter_info(fighter)
-        except Exception as exc:
-            print('There was an error: ', exc)
-    else:
-        print('Fighter not found')
+    try:
+        fighter = Fighter.find_by_name(name)
+        display_fighter_info(fighter)
+    except Exception as exc:
+        print('There was an error:', exc)
 
 def fighter_names():
     fighters = Fighter.get_all()
