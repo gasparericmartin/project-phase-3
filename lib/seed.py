@@ -21,8 +21,9 @@ def main():
     Fighter.create("Max Holloway", 32, 3, 30, 0)
     Fighter.create("Jose Aldo", 40, 3, 35, 7)
 
-    Fight.create("2/28/2024", 1, 2, 1)
-    Fight.create("9/9/2027", 3, 4, 3)
+    Fight.create("02/28/2024", 1, 2, 1)
+    Fight.create("09/09/2022", 3, 4, 3)
+    Fight.create("09/09/2022", 1, 2, 2)
 
 if __name__ == "__main__":
     main()

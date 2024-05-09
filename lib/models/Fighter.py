@@ -1,5 +1,6 @@
 from models.__init__ import CURSOR, CONN
 from models.Fight import Fight
+import re
 
 class Fighter:
 
@@ -36,7 +37,11 @@ class Fighter:
     
     @name.setter
     def name(self, name):
-        self._name = name
+        if re.fullmatch(r'[A-z]+[ -][A-z]*[ -]*[A-z]+', name):
+            self._name = name
+        else:
+            raise TypeError('Name must be a string with 2 or 3 names ' +\
+                            'separated by hyphens or spaces.')
     
     @property
     def age(self):
@@ -44,7 +49,10 @@ class Fighter:
     
     @age.setter
     def age(self, age):
-        self._age = age
+        if re.fullmatch(r'[0-9]{2}', str(age)):
+            self._age = age
+        else:
+            raise TypeError('Age must be a 2 digit integer.')
     
     @property
     def weight_class(self):
@@ -52,7 +60,7 @@ class Fighter:
     
     @weight_class.setter
     def weight_class(self, weight_class):
-        self._weight_class = weight_class
+            self._weight_class = weight_class
     
     @classmethod
     def create_table(cls):
@@ -158,7 +166,10 @@ class Fighter:
             WHERE name = ?
         """
         row = CURSOR.execute(sql, (name,)).fetchone()
-        return cls.instance_from_db(row) if row else None
+        if row:
+            return cls.instance_from_db(row)
+        else:
+            raise Exception('Fighter not found')
     
     @classmethod
     def find_by_weight_class(cls, weight_class_id):

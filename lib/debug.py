@@ -5,7 +5,7 @@ from models.__init__ import CONN, CURSOR
 from models.Fight import Fight
 from models.Fighter import Fighter
 from models.Weight_class import Weight_class
-from helpers import helper_1
+from helpers import *
 import ipdb
 
 Weight_class.drop_table()
@@ -24,8 +24,11 @@ Fighter.create("Assassin Baby", 32, 1, 15, 3)
 Fighter.create("Max Holloway", 32, 3, 30, 0)
 Fighter.create("Jose Aldo", 40, 3, 35, 7)
 
-Fight.create("2/28/2024", 1, 2, 1)
-Fight.create("9/9/2027", 3, 4, 3)
+Fight.create("02/28/2024", 1, 2, 1)
+Fight.create("09/09/2027", 3, 4, 3)
 
 max = Fighter.find_by_name('Max Holloway')
+fight = Fight.create('01/01/2924', 1, 2, 2)
 ipdb.set_trace()
+
+

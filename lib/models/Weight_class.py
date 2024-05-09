@@ -23,8 +23,9 @@ class Weight_class:
     
     @weight.setter
     def weight(self, weight):
-        if re.fullmatch(r'[0-9]?[0-9]{2}', weight):
-            self._weight = weight
+        
+        if re.fullmatch(r'[0-9]?[0-9]{2}', str(weight)):
+                self._weight = weight
         else:
             raise TypeError('Weights must be 2 or 3 digit integers')
     

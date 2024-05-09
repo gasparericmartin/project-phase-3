@@ -13,6 +13,10 @@ def weight_class_names():
     classes = Weight_class.get_all()
     return [weight_class.name for weight_class in classes]
 
+def weight_class_weights():
+    classes = Weight_class.get_all()
+    return [weight_class.weight for weight_class in classes]
+
 def display_class_info(weight_class):
     print(f'Weight: {weight_class.weight}lbs\n' +\
           f'Class Name: {weight_class.name}\n')
@@ -23,7 +27,7 @@ def display_all_weight_classes():
     [display_class_info(weight_class) for weight_class in weight_classes]
 
 def weight_class_by_weight(weight):
-    if re.match(r'[0-9]{3}', weight):
+    if re.match(r'[0-9]{3}', str(weight)):
         if weight_class := Weight_class.find_by_weight(weight):
             display_class_info(weight_class)
         else:
@@ -38,13 +42,18 @@ def fighters_in_class(weight):
     [display_fighter_info(fighter) for fighter in fighters]
 
 def display_fighter_info(fighter):
-    fighter_weight = Weight_class.find_by_id(fighter.weight_class).weight
-    print(f'Name: {fighter.name}\n' +\
-            f'Age: {fighter.age}\n' +\
-            f'Weight class: {fighter_weight}\n' +\
-            f'Wins: {fighter.wins}\n' +\
-            f'Losses: {fighter.losses}\n')
-
+    if fighter_weight := Weight_class.find_by_id(fighter.weight_class):
+        print(f'Name: {fighter.name}\n' +\
+                f'Age: {fighter.age}\n' +\
+                f'Weight class: {fighter_weight.weight}\n' +\
+                f'Wins: {fighter.wins}\n' +\
+                f'Losses: {fighter.losses}\n')
+    else:
+        print(f'Name: {fighter.name}\n' +\
+                f'Age: {fighter.age}\n' +\
+                f'Weight class: None\n' +\
+                f'Wins: {fighter.wins}\n' +\
+                f'Losses: {fighter.losses}\n')
 def all_fighters():
     fighters = Fighter.get_all()
     [display_fighter_info(fighter) for fighter in fighters]
@@ -90,32 +99,39 @@ def all_fights():
     Fight.get_all()
     [display_fight_info(fight) for fight in Fight.get_all()]
 
-def fights_by_date():
+def fights_by_date(date, display=True):
     pattern = re.compile('[0-9]{2}\/[0-9]{2}\/[0-9]{4}')
-    date = str(input('Enter date in 01/01/2001 format: '))
+    if not date:
+        date = str(input('Enter date in 01/01/2001 format: '))
     
     while not pattern.match(date):
         print('Invalid input')
         date = str(input('Enter date in 01/01/2001 format: '))
     
     if fights := Fight.find_by_date(date):
-        [display_fight_info(fight) for fight in fights]
+        if display:
+            [display_fight_info(fight) for fight in fights]
+        else:
+            return fights
     else:
-        print('No fights from that date found')
+         print('No fights from that date found')
     
 def fights_by_fighter(fighter):
     fights = fighter.all_fights()
     [display_fight_info(fight) for fight in fights]
 
 def all_fight_info():
-    fights = Fight.get_all()
+    Fight.get_all()
     return_list = []
     
-    for fight in fights:
-        return_list.append(f'Date: {fight.date}\n' +\
-                           f'Fighter 1: {fight.ftr_1}\n' +\
-                            f'Fighter 2: {fight.ftr_2}\n' +\
-                            f'Winner: {fight.winner}\n')
+    for fight in Fight.get_all():
+        ftr1 = Fighter.find_by_id(fight.ftr_1).name
+        ftr2 = Fighter.find_by_id(fight.ftr_2).name
+        wnr = Fighter.find_by_id(fight.winner).name
+        
+        return_list.append('Date: ' + fight.date +\
+                            ' | Fighter 1: ' + ftr1 +\
+                            ' | Fighter 2: ' + ftr2)
     
     return return_list
 
@@ -127,7 +143,7 @@ def create_weight_class():
         Weight_class.create(weight_, name_)
         print('New weight class created')
     except Exception as exc:
-        print('Error creating weight class', exc)
+        print('Error creating weight class: ', exc)
 
 def update_weight_class(class_name):
     if w_class := Weight_class.find_by_name(class_name):
@@ -153,32 +169,30 @@ def delete_weight_class(class_name):
     else:
         print('Weight class not found')
 
-def create_fighter():
-    name_ = input('Input name: ')
-    weight_ = Weight_class.find_by_weight(input('Input fight weight (number only): ')).id
-    #need int validation for find_by_weight method
-    age_ = input('Input age: ')
-    wins_ = input('Input wins: ')
-    losses_ = input('Input losses: ')
-
+def create_fighter(weight_):
     try:
+        name_ = input('Input name: ')
+        age_ = input('Input age: ')
+        wins_ = input('Input wins: ')
+        losses_ = input('Input losses: ')
+        
         Fighter.create(name_, age_, weight_, wins_, losses_)
         print('New fighter created')
     except Exception as exc:
         print('Error creating fighter', exc)
 
 def update_fighter(fighter):
-    fighter.name = input('Input new name: ')
-    fighter.weight = Weight_class.find_by_weight(input('Input new weight (number only): ')).id
-    fighter.age = input('Input new age: ')
-    fighter.wins = input('Input new wins: ')
-    fighter.losses = input('Input new losses: ')
-
     try:
+        fighter.name = input('Input new name: ')
+        fighter.weight = Weight_class.find_by_weight(input('Input new weight (number only): ')).id
+        fighter.age = input('Input new age: ')
+        fighter.wins = input('Input new wins: ')
+        fighter.losses = input('Input new losses: ')
+        
         fighter.update()
         print('Fighter successfully updated')
     except Exception as exc:
-        print('Error updating fighter', exc)
+        print('Error updating fighter: ', exc)
 
 def delete_fighter(fighter):
     try:
@@ -187,31 +201,61 @@ def delete_fighter(fighter):
     except Exception as exc:
         print('Error deleting fighter: ', exc)
 
-def create_fight(f1, f2, wnr):
-    #Consider replacing with a "valid date" method for all date inputs
-    #Would take a string as an argument to customize input prompt
-    date_ = input('Enter date in 01/01/2001 format: ')
-    ftr_1_ = Fighter.find_by_name(f1).id
-    ftr_2_ = Fighter.find_by_name(f2).id
-    winner_ = Fighter.find_by_name(wnr).id
-
+def create_fight(date_, f1, f2, wnr):
     try:
-        Fight.create(date_, ftr_1_, ftr_2_, winner_)
+        ftr_1_ = Fighter.find_by_name(f1)
+        ftr_2_ = Fighter.find_by_name(f2)
+        winner_ = Fighter.find_by_name(wnr)
+
+        Fight.find_by_date(date_)
+        same_date_fights = Fight.find_by_date(date_)
+
+        for fight in same_date_fights:
+            ftr_list = [ftr_1_.id, ftr_2_.id]
+            if fight.ftr_1 in ftr_list or fight.ftr_2 in ftr_list:
+                raise Exception('Fighters cannot fight twice in a day.')
+
+        if ftr_1_.weight_class != ftr_2_.weight_class:
+            raise Exception('Fighters must be in the same weight class.')
+        elif ftr_1_ == ftr_2_:
+            raise Exception('Fighters Must be unique')
+        elif winner_ not in [ftr_1_, ftr_2_]:
+            raise Exception('Winner must be one of the participants.')
+        
+        Fight.create(date_, ftr_1_.id, ftr_2_.id, winner_.id)
         print('Fight created')
     except Exception as exc:
-        print('Error creating fight', exc)
+        print('Error creating fight:', exc)
 
-def update_fight(fight):
-    fight.date = input('Enter new date in 01/01/2001 format: ')
-    fight.ftr_1 = Fighter.find_by_name(input('Enter new first fighter\'s name: ')).id
-    fight.ftr_2 = Fighter.find_by_name(input('Enter second fighter\'s name: ')).id
-    fight.winner = Fighter.find_by_name(input('Enter winner\'s name: ')).id
-
+def update_fight(fight, f1_, f2_, wnr_, date_):
     try:
+        ftr_1_ = Fighter.find_by_name(f1_)
+        ftr_2_ = Fighter.find_by_name(f2_)
+        winner_ = Fighter.find_by_name(wnr_)
+
+        Fight.find_by_date(date_)
+        same_date_fights = Fight.find_by_date(date_)
+
+        for fight in same_date_fights:
+            ftr_list = [ftr_1_.id, ftr_2_.id]
+            if fight.ftr_1 in ftr_list or fight.ftr_2 in ftr_list:
+                raise Exception('Fighters cannot fight twice in a day.')
+
+        if ftr_1_.weight_class != ftr_2_.weight_class:
+            raise Exception('Fighters must be in the same weight class.')
+        elif ftr_1_ == ftr_2_:
+            raise Exception('Fighters Must be unique')
+        elif winner_ not in [ftr_1_, ftr_2_]:
+            raise Exception('Winner must be one of the participants.')
+        
+        fight.date = date_
+        fight.ftr_1 = ftr_1_.id
+        fight.ftr_2 = ftr_2_.id
+        fight.winner = winner_.id
         fight.update()
         print('Fight updated')
     except Exception as exc:
-        print('Error updating fight: ', exc)
+        print('Error updating fight:', exc)
 
 def delete_fight(fight):
     try:
@@ -219,6 +263,7 @@ def delete_fight(fight):
         print('Fight deleted')
     except Exception as exc:
         print('Error deleting fight: ', exc)
+
 
 
 

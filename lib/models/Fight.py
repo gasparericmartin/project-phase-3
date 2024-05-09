@@ -1,4 +1,6 @@
 from models.__init__ import CURSOR, CONN
+import re
+import datetime
 
 class Fight:
 
@@ -32,7 +34,24 @@ class Fight:
     
     @date.setter
     def date(self, date):
+        month = date[0:2]
+        day = date[3:5]
+        year = date[6:]
+
+        current_day = datetime.datetime.now()
+       
+        if not re.fullmatch(r'[0-9]{2}\/[0-9]{2}\/[0-9]{4}', date):
+            raise TypeError('Date must be formatted like 01/01/2001.')
+        elif int(year) not in range(1993, datetime.datetime.now().year + 1):
+            raise Exception('Only past fights between 1993 and the present may be logged.')
+        elif int(year) == current_day.year:
+            if int(month) > current_day.month:
+                raise Exception('No future dates allowed.')
+            elif int(month) == current_day.month and int(day) > current_day.day:
+                raise Exception('No future dates allowed')
+
         self._date = date
+        
     
     @classmethod
     def create_table(cls):
@@ -139,5 +158,6 @@ class Fight:
         """
         rows = CURSOR.execute(sql, (date,)).fetchall()
         return [cls.instance_from_db(row) for row in rows if rows]
+    
     
 
