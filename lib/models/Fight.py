@@ -117,15 +117,16 @@ class Fight:
     @classmethod
     def instance_from_db(cls, row):
         fight = cls.all.get(row[0])
+        
         if fight:
             fight.date = row[1]
             fight.ftr_1 = row[2]
             fight.ftr_2 = row[3]
             fight.winner = row[4]
         else:
-            fighter = cls(row[1], row[2], row[3], row[4])
-            fighter.id = row[0]
-            cls.all[fighter.id] = fighter
+            fight = cls(row[1], row[2], row[3], row[4])
+            fight.id = row[0]
+            cls.all[fight.id] = fight
         
         return fight
     
