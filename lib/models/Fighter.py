@@ -199,6 +199,26 @@ class Fighter:
         """
         rows = CURSOR.execute(sql, (self.id,)).fetchall()
         return [Fight.instance_from_db(row) for row in rows]
+    
+    def opponents(self):
+        sql = """
+            SELECT *
+            FROM fights
+            WHERE ftr_1 = ? OR ftr_2 = ?
+        """
+        rows = CURSOR.execute(sql, (self.id, self.id)).fetchall()
+        fight_list = [Fight.instance_from_db(row) for row in rows]
+        fight_set = {}
+
+        for fight in fight_list:
+            if self.id == fight.ftr_1:
+                fight_set.add(fight.ftr_2)
+            elif self.id == fight.ftr_2:
+                fight_set.add(fight.ftr_1)
+        
+        return fight_set
+
+
 
 
 
