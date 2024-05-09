@@ -208,13 +208,13 @@ class Fighter:
         """
         rows = CURSOR.execute(sql, (self.id, self.id)).fetchall()
         fight_list = [Fight.instance_from_db(row) for row in rows]
-        fight_set = {}
+        fight_set = set()
 
         for fight in fight_list:
             if self.id == fight.ftr_1:
-                fight_set.add(fight.ftr_2)
+                fight_set.add(Fighter.find_by_id(fight.ftr_2).name)
             elif self.id == fight.ftr_2:
-                fight_set.add(fight.ftr_1)
+                fight_set.add(Fighter.find_by_id(fight.ftr_1).name)
         
         return fight_set
 
