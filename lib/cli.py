@@ -50,7 +50,8 @@ main_menu = [
 weight_classes = [
     inquirer.List('choice',
                     message='Make a selection',
-                    choices=['Display All Classes', 'Search by Weight',
+                    choices=['Display All Classes', 'Search by Weight', 
+                            'Fighters by Weight Class',
                             'Add Weight Class', 'Update Weight Class',
                             'Delete Weight Class', 'Back'])
 ]
@@ -112,6 +113,13 @@ def main():
             elif user_choice == 'Search by Weight':
                 weight = inquirer.prompt(weight_inquiry)['weight']
                 weight_class_by_weight(weight)
+            
+            elif user_choice == 'Fighters by Weight Class':
+                weight_class_choices = choices(weight_class_names)
+                choice = inquirer.prompt(weight_class_choices)['choice']
+                weight_class = Weight_class.find_by_name(choice)
+
+                fighters_in_class(weight_class.weight)
             
             elif user_choice == 'Add Weight Class':
                 create_weight_class()

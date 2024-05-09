@@ -54,6 +54,7 @@ def display_fighter_info(fighter):
                 f'Weight class: None\n' +\
                 f'Wins: {fighter.wins}\n' +\
                 f'Losses: {fighter.losses}\n')
+
 def all_fighters():
     fighters = Fighter.get_all()
     [display_fighter_info(fighter) for fighter in fighters]
