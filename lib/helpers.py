@@ -8,7 +8,6 @@ import re
 # To do:
 # -Weight class duplicate name validation
 # -Weight class duplicate weight validation
-# -View fighter opponents
 
 def exit_program():
     print('Exiting program')
@@ -79,7 +78,14 @@ def fighter_names():
 
 def fighter_opponents(ftr_name):
     fighter = Fighter.find_by_name(ftr_name)
-    print(fighter.opponents())
+    opponents = fighter.opponents()
+    [print(opponent) for opponent in opponents]
+
+def fighter_fights(ftr_name):
+    fighter = Fighter.find_by_name(ftr_name)
+    fights = fighter.all_fights()
+
+    [display_fight_info(fight) for fight in fights]
 
 def display_fight_info(fight):
     fighter_1 = Fighter.find_by_id(fight.ftr_1).name
@@ -147,6 +153,11 @@ def create_weight_class():
     name_ = input('Input class name: ')
 
     try:
+        if weight_ in weight_class_weights():
+            raise Exception('Weight already exists')
+        if name_ in weight_class_names():
+            raise Exception('Name already exists')
+        
         Weight_class.create(weight_, name_)
         print('New weight class created')
     except Exception as exc:
