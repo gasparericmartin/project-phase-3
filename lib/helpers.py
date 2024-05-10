@@ -141,7 +141,7 @@ def create_weight_class():
     name_ = input('Input class name: ')
 
     try:
-        if weight_ in weight_class_weights():
+        if int(weight_) in weight_class_weights():
             raise Exception('Weight already exists')
         if name_ in weight_class_names():
             raise Exception('Name already exists')
