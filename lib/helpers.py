@@ -94,19 +94,11 @@ def display_fight_info(fight):
         print(f'Date: {fight.date}\n' +\
             f'Fighter 1: {fighter_1}\n' +\
             f'Fighter 2: {fighter_2} *WINNER*\n')
-    else:
-        print(f'Date: {fight.date}\n' +\
-            f'Fighter 1: {fighter_1}\n' +\
-            f'Fighter 2: {fighter_2}\n' +\
-            f'Winner: Everybody loses\n')
     
 def all_fights():
-    #Very strange behavior, first call to Fight.get_all() returning none
-    #Will not function without first call
-    Fight.get_all()
     [display_fight_info(fight) for fight in Fight.get_all()]
 
-def fights_by_date(date, display=True):
+def fights_by_date(date=None, display=True):
     pattern = re.compile('[0-9]{2}\/[0-9]{2}\/[0-9]{4}')
     if not date:
         date = str(input('Enter date in 01/01/2001 format: '))
@@ -128,7 +120,6 @@ def fights_by_fighter(fighter):
     [display_fight_info(fight) for fight in fights]
 
 def all_fight_info():
-    Fight.get_all()
     return_list = []
     
     for fight in Fight.get_all():
@@ -227,8 +218,6 @@ def create_fight(date_, f1, f2, wnr):
         ftr_1_ = Fighter.find_by_name(f1)
         ftr_2_ = Fighter.find_by_name(f2)
         winner_ = Fighter.find_by_name(wnr)
-
-        Fight.find_by_date(date_)
         same_date_fights = Fight.find_by_date(date_)
 
         for fight in same_date_fights:
@@ -253,8 +242,6 @@ def update_fight(fight, f1_, f2_, wnr_, date_):
         ftr_1_ = Fighter.find_by_name(f1_)
         ftr_2_ = Fighter.find_by_name(f2_)
         winner_ = Fighter.find_by_name(wnr_)
-
-        Fight.find_by_date(date_)
         same_date_fights = Fight.find_by_date(date_)
 
         for fight in same_date_fights:
