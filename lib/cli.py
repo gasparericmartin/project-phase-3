@@ -1,4 +1,4 @@
-# lib/cli.py
+#!/usr/bin/env python3
 
 import inquirer
 import re
@@ -68,7 +68,7 @@ fighters = [
 fighter_menu = [
     inquirer.List('choice',
                     message='Make a selection',
-                    choices=['View Fights', 'View Opponents'])
+                    choices=['View Fights', 'View Opponents', 'Back'])
 ]
 
 fights = [
