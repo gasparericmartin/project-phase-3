@@ -60,6 +60,7 @@ fighters = [
     inquirer.List('choice',
                     message='Make a selection',
                     choices=['View All Fighters', 'Search by Name',
+                            'View Fights or Opponents',
                             'Add Fighter', 'Update Fighter',
                             'Delete Fighter', 'Back'])
 ]
@@ -149,6 +150,18 @@ def main():
             elif user_choice == 'Search by Name':
                 name = inquirer.prompt(name_inquiry)['name']
                 fighter_by_name(name)
+            
+            elif user_choice == 'View Fights or Opponents':
+                fighter_choices = choices(fighter_names)
+                choice = inquirer.prompt(fighter_choices)['choice']
+                menu_choice = inquirer.prompt(fighter_menu)['choice']
+
+                print(menu_choice)
+
+                if menu_choice == 'View Opponents':
+                    fighter_opponents(choice)
+                elif menu_choice == 'View Fights':
+                    fighter_fights(choice)
             
             elif user_choice == 'Add Fighter':
                 class_choices_in_lbs = choices(weight_class_weights)
@@ -248,8 +261,6 @@ def main():
             elif user_choice == 'Back':
                 pass
 
-
-        
         elif user_choice == 'Exit program':
             exit_program()
     
