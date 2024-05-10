@@ -10,13 +10,13 @@ class Fighter:
             self, 
             name, 
             age, 
-            weight_class = None, 
+            weight_class_id = None, 
             wins = 0, 
             losses = 0,
             id = None):
         self.name = name
         self.age = age
-        self.weight_class = weight_class
+        self.weight_class_id = weight_class_id
         self.wins = wins
         self.losses = losses
         self.id = id
@@ -25,7 +25,7 @@ class Fighter:
     def __repr__(self):
         return f'Fighter name: {self.name}, ' + \
                f'Age: {self.age}, ' + \
-               f'Weight class: {self.weight_class}, ' + \
+               f'Weight class: {self.weight_class_id}, ' + \
                f'Wins: {self.wins}, ' + \
                f'Losses: {self.losses}, ' + \
                f'id: {self.id}'
@@ -55,12 +55,12 @@ class Fighter:
             raise TypeError('Age must be a 2 digit integer.')
     
     @property
-    def weight_class(self):
-        return self._weight_class
+    def weight_class_id(self):
+        return self._weight_class_id
     
-    @weight_class.setter
-    def weight_class(self, weight_class):
-            self._weight_class = weight_class
+    @weight_class_id.setter
+    def weight_class_id(self, weight_class_id):
+            self._weight_class_id = weight_class_id
     
     @classmethod
     def create_table(cls):
@@ -69,10 +69,10 @@ class Fighter:
             id INTEGER PRIMARY KEY,
             name TEXT,
             age INTEGER,
-            weight_class INTEGER,
+            weight_class_id INTEGER,
             wins INTEGER,
             losses INTEGER,
-            FOREIGN KEY (weight_class) REFERENCES weight_classes(id))
+            FOREIGN KEY (weight_class_id) REFERENCES weight_classes(id))
         """
         CURSOR.execute(sql)
         CONN.commit()
@@ -87,10 +87,10 @@ class Fighter:
     
     def save(self):
         sql = """
-            INSERT INTO fighters (name, age, weight_class, wins, losses)
+            INSERT INTO fighters (name, age, weight_class_id, wins, losses)
             VALUES (?, ?, ?, ?, ?)
         """
-        CURSOR.execute(sql, (self.name, self.age, self.weight_class, self.wins, self.losses))
+        CURSOR.execute(sql, (self.name, self.age, self.weight_class_id, self.wins, self.losses))
         CONN.commit()
 
         self.id = CURSOR.lastrowid
@@ -99,10 +99,10 @@ class Fighter:
     def update(self):
         sql = """
             UPDATE fighters
-            SET name = ?, age = ?, weight_class = ?, wins = ?, losses = ?
+            SET name = ?, age = ?, weight_class_id = ?, wins = ?, losses = ?
             WHERE id = ?
         """
-        CURSOR.execute(sql, (self.name, self.age, self.weight_class,
+        CURSOR.execute(sql, (self.name, self.age, self.weight_class_id,
                              self.wins, self.losses, self.id))
         CONN.commit()
     
@@ -118,8 +118,8 @@ class Fighter:
         self.id = None
 
     @classmethod
-    def create(cls, name, age, weight_class=None, wins=0, losses=0):
-        fighter = cls(name, age, weight_class, wins, losses)
+    def create(cls, name, age, weight_class_id=None, wins=0, losses=0):
+        fighter = cls(name, age, weight_class_id, wins, losses)
         fighter.save()
         return fighter
 
@@ -129,7 +129,7 @@ class Fighter:
         if fighter:
             fighter.name = row[1]
             fighter.age = row[2]
-            fighter.weight_class = row[3]
+            fighter.weight_class_id = row[3]
             fighter.wins = row[4]
             fighter.losses = row[5]
 
@@ -172,11 +172,11 @@ class Fighter:
             raise Exception('Fighter not found')
     
     @classmethod
-    def find_by_weight_class(cls, weight_class_id):
+    def find_by_weight_class_id(cls, weight_class_id):
         sql = """
             SELECT *
             FROM fighters
-            WHERE weight_class = ?
+            WHERE weight_class_id = ?
         """
         rows = CURSOR.execute(sql, (weight_class_id,)).fetchall()
         return [cls.instance_from_db(row) for row in rows]

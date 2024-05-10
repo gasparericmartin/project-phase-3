@@ -27,22 +27,25 @@ def display_all_weight_classes():
     [display_class_info(weight_class) for weight_class in weight_classes]
 
 def weight_class_by_weight(weight):
-    if re.match(r'[0-9]{3}', str(weight)):
-        if weight_class := Weight_class.find_by_weight(weight):
-            display_class_info(weight_class)
+    try:
+        if re.match(r'[0-9]{3}', str(weight)):
+            if weight_class := Weight_class.find_by_weight(weight):
+                display_class_info(weight_class)
+            else:
+                print('Weight class not found')
         else:
-            print('Weight class not found')
-    else:
-        raise TypeError('Input must be 3 consecutive numbers')
+            raise TypeError('Input must be 3 consecutive numbers')
+    except Exception as exc:
+        print('There was an error:', exc)
 
 def fighters_in_class(weight):
     weight_class = Weight_class.find_by_weight(weight)
-    fighters = Fighter.find_by_weight_class(weight_class.id)
+    fighters = weight_class.all_fighters_in_class()
     
     [display_fighter_info(fighter) for fighter in fighters]
 
 def display_fighter_info(fighter):
-    if fighter_weight := Weight_class.find_by_id(fighter.weight_class):
+    if fighter_weight := Weight_class.find_by_id(fighter.weight_class_id):
         print(f'Name: {fighter.name}\n' +\
                 f'Age: {fighter.age}\n' +\
                 f'Weight class: {fighter_weight.weight}\n' +\
@@ -225,7 +228,7 @@ def create_fight(date_, f1, f2, wnr):
             if fight.ftr_1 in ftr_list or fight.ftr_2 in ftr_list:
                 raise Exception('Fighters cannot fight twice in a day.')
 
-        if ftr_1_.weight_class != ftr_2_.weight_class:
+        if ftr_1_.weight_class_id != ftr_2_.weight_class_id:
             raise Exception('Fighters must be in the same weight class.')
         elif ftr_1_ == ftr_2_:
             raise Exception('Fighters Must be unique')
@@ -249,7 +252,7 @@ def update_fight(fight, f1_, f2_, wnr_, date_):
             if fight.ftr_1 in ftr_list or fight.ftr_2 in ftr_list:
                 raise Exception('Fighters cannot fight twice in a day.')
 
-        if ftr_1_.weight_class != ftr_2_.weight_class:
+        if ftr_1_.weight_class_id != ftr_2_.weight_class_id:
             raise Exception('Fighters must be in the same weight class.')
         elif ftr_1_ == ftr_2_:
             raise Exception('Fighters Must be unique')
