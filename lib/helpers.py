@@ -184,14 +184,14 @@ def delete_weight_class(class_name):
     else:
         print('Weight class not found')
 
-def create_fighter(weight_):
+def create_fighter(weight_class_id_):
     try:
         name_ = input('Input name: ')
         age_ = input('Input age: ')
         wins_ = input('Input wins: ')
         losses_ = input('Input losses: ')
         
-        Fighter.create(name_, age_, weight_, wins_, losses_)
+        Fighter.create(name_, age_, weight_class_id_, wins_, losses_)
         print('New fighter created')
     except Exception as exc:
         print('Error creating fighter', exc)
