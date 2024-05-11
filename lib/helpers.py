@@ -199,7 +199,7 @@ def create_fighter(weight_):
 def update_fighter(fighter):
     try:
         fighter.name = input('Input new name: ')
-        fighter.weight = Weight_class.find_by_weight(input('Input new weight (number only): ')).id
+        fighter.weight_class_id = Weight_class.find_by_weight(input('Input new weight (number only): ')).id
         fighter.age = input('Input new age: ')
         fighter.wins = input('Input new wins: ')
         fighter.losses = input('Input new losses: ')
