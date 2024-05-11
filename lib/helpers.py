@@ -85,9 +85,9 @@ def fighter_fights(ftr_name):
     [display_fight_info(fight) for fight in fights]
 
 def display_fight_info(fight):
-    fighter_1 = Fighter.find_by_id(fight.ftr_1).name
-    fighter_2 = Fighter.find_by_id(fight.ftr_2).name
-    winner = Fighter.find_by_id(fight.winner).name if fight.winner else None
+    fighter_1 = Fighter.find_by_id(fight.ftr_1_id).name
+    fighter_2 = Fighter.find_by_id(fight.ftr_2_id).name
+    winner = Fighter.find_by_id(fight.winner_id).name if fight.winner_id else None
     
     if fighter_1 == winner:
         print(f'Date: {fight.date}\n' +\
@@ -126,9 +126,9 @@ def all_fight_info():
     return_list = []
     
     for fight in Fight.get_all():
-        ftr1 = Fighter.find_by_id(fight.ftr_1).name
-        ftr2 = Fighter.find_by_id(fight.ftr_2).name
-        wnr = Fighter.find_by_id(fight.winner).name
+        ftr1 = Fighter.find_by_id(fight.ftr_1_id).name
+        ftr2 = Fighter.find_by_id(fight.ftr_2_id).name
+        wnr = Fighter.find_by_id(fight.winner_id).name
         
         return_list.append('Date: ' + fight.date +\
                             ' | Fighter 1: ' + ftr1 +\
@@ -225,7 +225,7 @@ def create_fight(date_, f1, f2, wnr):
 
         for fight in same_date_fights:
             ftr_list = [ftr_1_.id, ftr_2_.id]
-            if fight.ftr_1 in ftr_list or fight.ftr_2 in ftr_list:
+            if fight.ftr_1_id in ftr_list or fight.ftr_2_id in ftr_list:
                 raise Exception('Fighters cannot fight twice in a day.')
 
         if ftr_1_.weight_class_id != ftr_2_.weight_class_id:
@@ -249,7 +249,7 @@ def update_fight(fight, f1_, f2_, wnr_, date_):
 
         for fight in same_date_fights:
             ftr_list = [ftr_1_.id, ftr_2_.id]
-            if fight.ftr_1 in ftr_list or fight.ftr_2 in ftr_list:
+            if fight.ftr_1_id in ftr_list or fight.ftr_2_id in ftr_list:
                 raise Exception('Fighters cannot fight twice in a day.')
 
         if ftr_1_.weight_class_id != ftr_2_.weight_class_id:
@@ -260,9 +260,9 @@ def update_fight(fight, f1_, f2_, wnr_, date_):
             raise Exception('Winner must be one of the participants.')
         
         fight.date = date_
-        fight.ftr_1 = ftr_1_.id
-        fight.ftr_2 = ftr_2_.id
-        fight.winner = winner_.id
+        fight.ftr_1_id = ftr_1_.id
+        fight.ftr_2_id = ftr_2_.id
+        fight.winner_id = winner_.id
         fight.update()
         print('Fight updated')
     except Exception as exc:

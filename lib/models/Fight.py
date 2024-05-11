@@ -9,22 +9,22 @@ class Fight:
     def __init__(
             self, 
             date, 
-            ftr_1 = None, 
-            ftr_2 = None, 
-            winner = None, 
+            ftr_1_id = None, 
+            ftr_2_id = None, 
+            winner_id = None, 
             id = None):
         self.date = date
-        self.ftr_1 = ftr_1
-        self.ftr_2 = ftr_2
-        self.winner = winner
+        self.ftr_1_id = ftr_1_id
+        self.ftr_2_id = ftr_2_id
+        self.winner_id = winner_id
         self.id = id
         
     
     def __repr__(self):
         return f'Fight date: {self.date}, ' + \
-            f'Fighter 1: {self.ftr_1}, ' + \
-            f'Fighter 2: {self.ftr_2}, ' + \
-            f'Winner: {self.winner}, ' + \
+            f'Fighter 1: {self.ftr_1_id}, ' + \
+            f'Fighter 2: {self.ftr_2_id}, ' + \
+            f'Winner: {self.winner_id}, ' + \
             f'id: {self.id}'
         
     
@@ -59,12 +59,12 @@ class Fight:
             CREATE TABLE IF NOT EXISTS fights(
             id INTEGER PRIMARY KEY,
             date TEXT,
-            ftr_1 INTEGER,
-            ftr_2 INTEGER,
-            winner INTEGER,
-            FOREIGN KEY (ftr_1) REFERENCES fighters(id),
-            FOREIGN KEY (ftr_2) REFERENCES fighters(id),
-            FOREIGN KEY (winner) REFERENCES fighters(id))
+            ftr_1_id INTEGER,
+            ftr_2_id INTEGER,
+            winner_id INTEGER,
+            FOREIGN KEY (ftr_1_id) REFERENCES fighters(id),
+            FOREIGN KEY (ftr_2_id) REFERENCES fighters(id),
+            FOREIGN KEY (winner_id) REFERENCES fighters(id))
         """
         CURSOR.execute(sql)
         CONN.commit()
@@ -79,10 +79,10 @@ class Fight:
     
     def save(self):
         sql = """
-            INSERT INTO fights (date, ftr_1, ftr_2, winner)
+            INSERT INTO fights (date, ftr_1_id, ftr_2_id, winner_id)
             VALUES (?,?,?,?)
         """
-        CURSOR.execute(sql,(self.date, self.ftr_1, self.ftr_2, self.winner))
+        CURSOR.execute(sql,(self.date, self.ftr_1_id, self.ftr_2_id, self.winner_id))
         CONN.commit()
 
         self.id = CURSOR.lastrowid
@@ -91,10 +91,10 @@ class Fight:
     def update(self):
         sql = """
             UPDATE fights
-            SET date = ?, ftr_1 = ?, ftr_2 = ?, winner = ?
+            SET date = ?, ftr_1_id = ?, ftr_2_id = ?, winner_id = ?
             WHERE id = ?
         """
-        CURSOR.execute(sql, (self.date, self.ftr_1, self.ftr_2, self.winner, self.id))
+        CURSOR.execute(sql, (self.date, self.ftr_1_id, self.ftr_2_id, self.winner_id, self.id))
         CONN.commit()
 
     def delete(self):
@@ -109,8 +109,8 @@ class Fight:
         self.id = None
     
     @classmethod
-    def create(cls, date, ftr_1=None, ftr_2=None, winner=None):
-        fight = cls(date, ftr_1, ftr_2, winner)
+    def create(cls, date, ftr_1_id=None, ftr_2_id=None, winner_id=None):
+        fight = cls(date, ftr_1_id, ftr_2_id, winner_id)
         fight.save()
         return fight
     
@@ -120,9 +120,9 @@ class Fight:
         
         if fight:
             fight.date = row[1]
-            fight.ftr_1 = row[2]
-            fight.ftr_2 = row[3]
-            fight.winner = row[4]
+            fight.ftr_1_id = row[2]
+            fight.ftr_2_id = row[3]
+            fight.winner_id = row[4]
         else:
             fight = cls(row[1], row[2], row[3], row[4])
             fight.id = row[0]

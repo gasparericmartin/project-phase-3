@@ -185,7 +185,7 @@ class Fighter:
         sql = """
             SELECT *
             FROM fights
-            WHERE ftr_1 = ? OR ftr_2 = ?
+            WHERE ftr_1_id = ? OR ftr_2_id = ?
         """
 
         rows = CURSOR.execute(sql, (self.id, self.id)).fetchall()
@@ -195,7 +195,7 @@ class Fighter:
         sql = """
             SELECT *
             FROM fights
-            WHERE winner = ?
+            WHERE winner_id = ?
         """
         rows = CURSOR.execute(sql, (self.id,)).fetchall()
         return [Fight.instance_from_db(row) for row in rows]
@@ -204,16 +204,16 @@ class Fighter:
         sql = """
             SELECT *
             FROM fights
-            WHERE ftr_1 = ? OR ftr_2 = ?
+            WHERE ftr_1_id = ? OR ftr_2_id = ?
         """
         rows = CURSOR.execute(sql, (self.id, self.id)).fetchall()
         fight_list = [Fight.instance_from_db(row) for row in rows]
         fight_set = set()
 
         for fight in fight_list:
-            if self.id == fight.ftr_1:
+            if self.id == fight.ftr_1_id:
                 fight_set.add(Fighter.find_by_id(fight.ftr_2).name)
-            elif self.id == fight.ftr_2:
+            elif self.id == fight.ftr_2_id:
                 fight_set.add(Fighter.find_by_id(fight.ftr_1).name)
         
         return fight_set
