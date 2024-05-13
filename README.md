@@ -19,3 +19,7 @@ run "./cli.py" to execute the command line interface.
 # Usage
 
 Using the series of prompts in the terminal, you may interact witht the database in multiple ways. Viewing, searching for, adding, updating, and deleting from all three tables is possible. Additionally, you may view related information such as a fighter's opponents and fights, as well as which fighters are in a weight class. 
+
+# Acknowledgments
+
+* Justin Rodriguez for support, guidance, and encouragement. 
