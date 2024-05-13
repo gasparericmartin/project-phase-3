@@ -212,9 +212,11 @@ class Fighter:
 
         for fight in fight_list:
             if self.id == fight.ftr_1_id:
-                fight_set.add(Fighter.find_by_id(fight.ftr_2_id).name)
+                if fighter_2 := Fighter.find_by_id(fight.ftr_2_id):
+                    fight_set.add(fighter_2.name)
             elif self.id == fight.ftr_2_id:
-                fight_set.add(Fighter.find_by_id(fight.ftr_1_id).name)
+                if fighter_1 := Fighter.find_by_id(fight.ftr_1_id):
+                    fight_set.add(fighter_1.name)
         
         return fight_set
 
