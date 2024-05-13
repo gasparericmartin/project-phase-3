@@ -34,7 +34,7 @@ class Weight_class:
     
     @name.setter
     def name(self, name):
-        if not re.fullmatch(r'[A-z]*[A-z]+weight', name):
+        if not re.fullmatch(r'[A-z]*[ ]?[A-z]+weight', name):
             raise TypeError('Weight class name must be a string ending in \'weight\'')
             
         self._name = name
