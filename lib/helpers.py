@@ -85,18 +85,28 @@ def fighter_fights(ftr_name):
     [display_fight_info(fight) for fight in fights]
 
 def display_fight_info(fight):
-    fighter_1 = Fighter.find_by_id(fight.ftr_1_id).name
-    fighter_2 = Fighter.find_by_id(fight.ftr_2_id).name
-    winner = Fighter.find_by_id(fight.winner_id).name if fight.winner_id else None
+    if fighter_1 := Fighter.find_by_id(fight.ftr_1_id):
+        fighter_1_name = fighter_1.name
+    else:
+        fighter_1_name = 'Fighter deleted'
+    
+    if fighter_2 := Fighter.find_by_id(fight.ftr_2_id):
+        fighter_2_name = fighter_2.name
+    else:
+        fighter_2_name = 'Fighter deleted'
+
+    if winner := Fighter.find_by_id(fight.winner_id):
+        pass
+
     
     if fighter_1 == winner:
         print(f'Date: {fight.date}\n' +\
-                f'Fighter 1: {fighter_1} *WINNER* \n' +\
-                f'Fighter 2: {fighter_2}\n')
+                f'Fighter 1: {fighter_1_name} *WINNER* \n' +\
+                f'Fighter 2: {fighter_2_name}\n')
     elif fighter_2 == winner: 
         print(f'Date: {fight.date}\n' +\
-            f'Fighter 1: {fighter_1}\n' +\
-            f'Fighter 2: {fighter_2} *WINNER*\n')
+            f'Fighter 1: {fighter_1_name}\n' +\
+            f'Fighter 2: {fighter_2_name} *WINNER*\n')
     
 def all_fights():
     [display_fight_info(fight) for fight in Fight.get_all()]
