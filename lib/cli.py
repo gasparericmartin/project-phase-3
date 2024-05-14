@@ -106,163 +106,175 @@ def main():
         user_choice = inquirer.prompt(main_menu)['choice']
         
         if user_choice == 'Weight Classes':
-            user_choice = inquirer.prompt(weight_classes)['choice']
-            
-            if user_choice == 'Display All Classes':
-                display_all_weight_classes()
-            
-            elif user_choice == 'Search by Weight':
-                weight = inquirer.prompt(weight_inquiry)['weight']
-                weight_class_by_weight(weight)
-            
-            elif user_choice == 'Fighters by Weight Class':
-                weight_class_choices = choices(weight_class_names)
-                choice = inquirer.prompt(weight_class_choices)['choice']
-                weight_class = Weight_class.find_by_name(choice)
+            weight_classes_loop()
 
-                fighters_in_class(weight_class.weight)
-            
-            elif user_choice == 'Add Weight Class':
-                create_weight_class()
-            
-            elif user_choice == 'Update Weight Class':
-                weight_class_choices = choices(weight_class_names)
-                
-                choice = inquirer.prompt(weight_class_choices)['choice']
-                update_weight_class(choice)
-            
-            elif user_choice == 'Delete Weight Class':
-                weight_class_choices = choices(weight_class_names)
-                
-                choice = inquirer.prompt(weight_class_choices)['choice']
-                delete_weight_class(choice)
-            
-            elif user_choice == 'Back':
-                pass 
-
-        
         elif user_choice == 'Fighters':
-            user_choice = inquirer.prompt(fighters)['choice']
-            
-            if user_choice == 'View All Fighters':
-                all_fighters()
-            
-            elif user_choice == 'Search by Name':
-                name = inquirer.prompt(name_inquiry)['name']
-                fighter_by_name(name)
-            
-            elif user_choice == 'View Fights or Opponents':
-                fighter_choices = choices(fighter_names)
-                choice = inquirer.prompt(fighter_choices)['choice']
-                menu_choice = inquirer.prompt(fighter_menu)['choice']
-
-                print(menu_choice)
-
-                if menu_choice == 'View Opponents':
-                    fighter_opponents(choice)
-                elif menu_choice == 'View Fights':
-                    fighter_fights(choice)
-            
-            elif user_choice == 'Add Fighter':
-                class_choices_in_lbs = choices(weight_class_weights)
-
-                print('Choose your fighter\'s weight class')
-                raw_choice = inquirer.prompt(class_choices_in_lbs)['choice']
-                choice = Weight_class.find_by_weight(raw_choice).id
-
-                create_fighter(choice)
-            
-            elif user_choice == 'Update Fighter':
-                fighter_choices = choices(fighter_names)
-
-                choice = inquirer.prompt(fighter_choices)['choice']
-                fighter = Fighter.find_by_name(choice)
-                
-                print('Current fighter info: ')
-                display_fighter_info(fighter)
-                update_fighter(fighter)
-            
-            elif user_choice == 'Delete Fighter':
-                fighter_choices = choices(fighter_names)
-
-                choice = inquirer.prompt(fighter_choices)['choice']
-                fighter = Fighter.find_by_name(choice)
-
-                delete_fighter(fighter)
-            
-            elif user_choice == 'Back':
-                pass
+            fighters_loop()
         
         elif user_choice == 'Fights':
-            user_choice = inquirer.prompt(fights)['choice']
-
-            if user_choice == 'View All Fights':
-                all_fights()
-            
-            elif user_choice == 'Search by Date':
-                fights_by_date()
-            
-            elif user_choice == 'Add Fight':
-                fighter_choices = choices(fighter_names)
-                
-                print('Enter fighter 1: ')
-                f1 = inquirer.prompt(fighter_choices)['choice']
-                print('Enter fighter 2: ')
-                f2 = inquirer.prompt(fighter_choices)['choice']
-                print('Enter winner: ')
-                wnr = inquirer.prompt(fighter_choices)['choice']
-                date_ = inquirer.prompt(date_inquiry)['date']
-
-                
-                create_fight(date_, f1, f2, wnr)
-            
-            elif user_choice == 'Update Fight':
-                fight_choices = choices(all_fight_info)
-                fighter_choices = choices(fighter_names)
-                
-                raw_choice = inquirer.prompt(fight_choices)['choice']
-                choice = re.findall(r'[0-9]{2}\/[0-9]{2}\/[0-9]{4}', raw_choice)[0]
-                fight_s = fights_by_date(choice, False)
-
-                print('Enter new fighter 1: ')
-                f1 = inquirer.prompt(name_inquiry)['name']
-                print('Enter new fighter 2: ')
-                f2 = inquirer.prompt(name_inquiry)['name']
-                print('Enter new winner: ')
-                wnr = inquirer.prompt(name_inquiry)['name']
-                print('Enter new date: ')
-                date_ = inquirer.prompt(date_inquiry)['date']
-                
-                if len(fight_s) == 1:
-                    update_fight(fight_s[0], f1, f2, wnr, date_)
-                else:
-                    search_name = re.search(r'[A-z]+[ -][A-z]*[ -]*[A-z]+', raw_choice).group()
-                    for fight in fight_s:
-                        compare_name = Fighter.find_by_id(fight.ftr_1).name
-                        if search_name == compare_name:
-                            update_fight(fight, f1, f2, wnr, date_)
-                
-            elif user_choice == 'Delete Fight':
-                fight_choices = choices(all_fight_info)
-
-                raw_choice = inquirer.prompt(fight_choices)['choice']
-                choice = re.findall(r'[0-9]{2}\/[0-9]{2}\/[0-9]{4}', raw_choice)[0]
-                fight_s = fights_by_date(choice, False)
-                
-                if len(fight_s) == 1:
-                    delete_fight(fight_s[0])
-                else:
-                    search_name = re.search(r'[A-z]+[ -][A-z]*[ -]*[A-z]+', raw_choice).group()
-                    for fight in fight_s:
-                        compare_name = Fighter.find_by_id(fight.ftr_1).name
-                        if search_name == compare_name:
-                            delete_fight(fight)
-                    
-            elif user_choice == 'Back':
-                pass
+            fights_loop()
 
         elif user_choice == 'Exit program':
             exit_program()
+
+def weight_classes_loop():
+    while True:
+        user_choice = inquirer.prompt(weight_classes)['choice']
+                
+        if user_choice == 'Display All Classes':
+            display_all_weight_classes()
+                
+        elif user_choice == 'Search by Weight':
+            weight = inquirer.prompt(weight_inquiry)['weight']
+            weight_class_by_weight(weight)
+                
+        elif user_choice == 'Fighters by Weight Class':
+            weight_class_choices = choices(weight_class_names)
+            choice = inquirer.prompt(weight_class_choices)['choice']
+            weight_class = Weight_class.find_by_name(choice)
+
+            fighters_in_class(weight_class.weight)
+                
+        elif user_choice == 'Add Weight Class':
+            create_weight_class()
+                
+        elif user_choice == 'Update Weight Class':
+            weight_class_choices = choices(weight_class_names)
+                    
+            choice = inquirer.prompt(weight_class_choices)['choice']
+            update_weight_class(choice)
+                
+        elif user_choice == 'Delete Weight Class':
+            weight_class_choices = choices(weight_class_names)
+                    
+            choice = inquirer.prompt(weight_class_choices)['choice']
+            delete_weight_class(choice)
+                
+        elif user_choice == 'Back':
+            main()
+
+def fighters_loop():
+    while True:
+        user_choice = inquirer.prompt(fighters)['choice']
+                
+        if user_choice == 'View All Fighters':
+            all_fighters()
+                
+        elif user_choice == 'Search by Name':
+            name = inquirer.prompt(name_inquiry)['name']
+            fighter_by_name(name)
+                
+        elif user_choice == 'View Fights or Opponents':
+            fighter_choices = choices(fighter_names)
+            choice = inquirer.prompt(fighter_choices)['choice']
+            menu_choice = inquirer.prompt(fighter_menu)['choice']
+
+            print(menu_choice)
+
+            if menu_choice == 'View Opponents':
+                fighter_opponents(choice)
+            elif menu_choice == 'View Fights':
+                fighter_fights(choice)
+                
+        elif user_choice == 'Add Fighter':
+            class_choices_in_lbs = choices(weight_class_weights)
+
+            print('Choose your fighter\'s weight class')
+            raw_choice = inquirer.prompt(class_choices_in_lbs)['choice']
+            choice = Weight_class.find_by_weight(raw_choice).id
+
+            create_fighter(choice)
+                
+        elif user_choice == 'Update Fighter':
+            fighter_choices = choices(fighter_names)
+
+            choice = inquirer.prompt(fighter_choices)['choice']
+            fighter = Fighter.find_by_name(choice)
+                    
+            print('Current fighter info: ')
+            display_fighter_info(fighter)
+            update_fighter(fighter)
+                
+        elif user_choice == 'Delete Fighter':
+            fighter_choices = choices(fighter_names)
+
+            choice = inquirer.prompt(fighter_choices)['choice']
+            fighter = Fighter.find_by_name(choice)
+
+            delete_fighter(fighter)
+                
+        elif user_choice == 'Back':
+            main()
+
+def fights_loop():
+    while True:
+        user_choice = inquirer.prompt(fights)['choice']
+
+        if user_choice == 'View All Fights':
+            all_fights()
+        
+        elif user_choice == 'Search by Date':
+            fights_by_date()
+        
+        elif user_choice == 'Add Fight':
+            fighter_choices = choices(fighter_names)
+            
+            print('Enter fighter 1: ')
+            f1 = inquirer.prompt(fighter_choices)['choice']
+            print('Enter fighter 2: ')
+            f2 = inquirer.prompt(fighter_choices)['choice']
+            print('Enter winner: ')
+            wnr = inquirer.prompt(fighter_choices)['choice']
+            date_ = inquirer.prompt(date_inquiry)['date']
+
+            
+            create_fight(date_, f1, f2, wnr)
+        
+        elif user_choice == 'Update Fight':
+            fight_choices = choices(all_fight_info)
+            fighter_choices = choices(fighter_names)
+            
+            raw_choice = inquirer.prompt(fight_choices)['choice']
+            choice = re.findall(r'[0-9]{2}\/[0-9]{2}\/[0-9]{4}', raw_choice)[0]
+            fight_s = fights_by_date(choice, False)
+
+            print('Enter new fighter 1: ')
+            f1 = inquirer.prompt(name_inquiry)['name']
+            print('Enter new fighter 2: ')
+            f2 = inquirer.prompt(name_inquiry)['name']
+            print('Enter new winner: ')
+            wnr = inquirer.prompt(name_inquiry)['name']
+            print('Enter new date: ')
+            date_ = inquirer.prompt(date_inquiry)['date']
+            
+            if len(fight_s) == 1:
+                update_fight(fight_s[0], f1, f2, wnr, date_)
+            else:
+                search_name = re.search(r'[A-z]+[ -][A-z]*[ -]*[A-z]+', raw_choice).group()
+                for fight in fight_s:
+                    compare_name = Fighter.find_by_id(fight.ftr_1).name
+                    if search_name == compare_name:
+                        update_fight(fight, f1, f2, wnr, date_)
+            
+        elif user_choice == 'Delete Fight':
+            fight_choices = choices(all_fight_info)
+
+            raw_choice = inquirer.prompt(fight_choices)['choice']
+            choice = re.findall(r'[0-9]{2}\/[0-9]{2}\/[0-9]{4}', raw_choice)[0]
+            fight_s = fights_by_date(choice, False)
+            
+            if len(fight_s) == 1:
+                delete_fight(fight_s[0])
+            else:
+                search_name = re.search(r'[A-z]+[ -][A-z]*[ -]*[A-z]+', raw_choice).group()
+                for fight in fight_s:
+                    compare_name = Fighter.find_by_id(fight.ftr_1).name
+                    if search_name == compare_name:
+                        delete_fight(fight)
+                
+        elif user_choice == 'Back':
+            main()
+
     
 
 
