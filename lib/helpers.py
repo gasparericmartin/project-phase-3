@@ -167,7 +167,7 @@ def create_weight_class():
     try:
         if int(weight_) in weights_list:
             raise Exception('Weight already exists')
-        if name_ in class_names_list:
+        if name_.lower() in [n.lower() for n in class_names_list]:
             raise Exception('Name already exists')
         
         Weight_class.create(weight_, name_)
