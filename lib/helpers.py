@@ -76,7 +76,9 @@ def fighter_by_name(name):
 
 def fighter_names():
     fighters = Fighter.get_all()
-    return [fighter.name for fighter in fighters]
+    list = [fighter.name for fighter in fighters]
+
+    return list if len(list) > 0 else None
 
 def fighter_opponents(ftr_name):
     fighter = Fighter.find_by_name(ftr_name)
