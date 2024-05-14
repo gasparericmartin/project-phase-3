@@ -156,11 +156,13 @@ def all_fight_info():
 def create_weight_class():
     weight_ = input('Input weight (number only): ')
     name_ = input('Input class name: ')
+    weights_list = weight_class_weights() if weight_class_weights() else []
+    class_names_list = weight_class_names() if weight_class_names() else []
 
     try:
-        if int(weight_) in weight_class_weights():
+        if int(weight_) in weights_list:
             raise Exception('Weight already exists')
-        if name_ in weight_class_names():
+        if name_ in class_names_list:
             raise Exception('Name already exists')
         
         Weight_class.create(weight_, name_)
