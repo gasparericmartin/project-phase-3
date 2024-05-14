@@ -28,8 +28,10 @@ def display_class_info(weight_class):
 
 def display_all_weight_classes():
     weight_classes = Weight_class.get_all()
-
-    [display_class_info(weight_class) for weight_class in weight_classes]
+    if len(weight_classes) > 0:
+        [display_class_info(weight_class) for weight_class in weight_classes]
+    else:
+        print('No weight classes to display')
 
 def weight_class_by_weight(weight):
     try:
@@ -65,7 +67,10 @@ def display_fighter_info(fighter):
 
 def all_fighters():
     fighters = Fighter.get_all()
-    [display_fighter_info(fighter) for fighter in fighters]
+    if len(fighters) > 0:
+        [display_fighter_info(fighter) for fighter in fighters]
+    else:
+        print('No fighters to display')
 
 def fighter_by_name(name):
     try:
