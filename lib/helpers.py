@@ -201,7 +201,7 @@ def delete_weight_class(class_name):
     else:
         print('Weight class not found')
 
-def create_fighter(weight_class_id_):
+def create_fighter(weight_class_id_=None):
     try:
         name_ = input('Input name: ')
         age_ = input('Input age: ')
