@@ -11,11 +11,16 @@ def exit_program():
 
 def weight_class_names():
     classes = Weight_class.get_all()
-    return [weight_class.name for weight_class in classes]
+    list = [weight_class.name for weight_class in classes]
+
+    return list if len(list) > 0 else None
+
 
 def weight_class_weights():
     classes = Weight_class.get_all()
-    return [weight_class.weight for weight_class in classes]
+    list = [weight_class.weight for weight_class in classes]
+
+    return list if len(list) > 0 else None
 
 def display_class_info(weight_class):
     print(f'Weight: {weight_class.weight}lbs\n' +\
