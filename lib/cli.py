@@ -175,43 +175,56 @@ def fighters_loop():
             fighter_by_name(name)
                 
         elif user_choice == 'View Fights or Opponents':
-            fighter_choices = choices(fighter_names)
-            choice = inquirer.prompt(fighter_choices)['choice']
-            menu_choice = inquirer.prompt(fighter_menu)['choice']
+            fighter_choices = choices(fighter_names) if fighter_names() else None
+            
+            if fighter_choices:
+                choice = inquirer.prompt(fighter_choices)['choice']
+                menu_choice = inquirer.prompt(fighter_menu)['choice']
 
-            print(menu_choice)
+                print(menu_choice)
 
-            if menu_choice == 'View Opponents':
-                fighter_opponents(choice)
-            elif menu_choice == 'View Fights':
-                fighter_fights(choice)
+                if menu_choice == 'View Opponents':
+                    fighter_opponents(choice)
+                elif menu_choice == 'View Fights':
+                    fighter_fights(choice)
+            else:
+                print('No fighters in database')
                 
         elif user_choice == 'Add Fighter':
-            class_choices_in_lbs = choices(weight_class_weights)
+            class_choices_in_lbs = choices(weight_class_weights) if weight_class_weights() else None
 
-            print('Choose your fighter\'s weight class')
-            raw_choice = inquirer.prompt(class_choices_in_lbs)['choice']
-            choice = Weight_class.find_by_weight(raw_choice).id
+            if class_choices_in_lbs:
+                print('Choose your fighter\'s weight class')
+                raw_choice = inquirer.prompt(class_choices_in_lbs)['choice']
+                choice = Weight_class.find_by_weight(raw_choice).id
 
-            create_fighter(choice)
+                create_fighter(choice)
+            else:
+                create_fighter()
                 
         elif user_choice == 'Update Fighter':
-            fighter_choices = choices(fighter_names)
+            fighter_choices = choices(fighter_names) if fighter_names() else None
 
-            choice = inquirer.prompt(fighter_choices)['choice']
-            fighter = Fighter.find_by_name(choice)
-                    
-            print('Current fighter info: ')
-            display_fighter_info(fighter)
-            update_fighter(fighter)
+            if fighter_choices:
+                choice = inquirer.prompt(fighter_choices)['choice']
+                fighter = Fighter.find_by_name(choice)
+                        
+                print('Current fighter info: ')
+                display_fighter_info(fighter)
+                update_fighter(fighter)
+            else:
+                print('No fighters to update')
                 
         elif user_choice == 'Delete Fighter':
-            fighter_choices = choices(fighter_names)
+            fighter_choices = choices(fighter_names) if fighter_names() else None
+            
+            if fighter_choices:
+                choice = inquirer.prompt(fighter_choices)['choice']
+                fighter = Fighter.find_by_name(choice)
 
-            choice = inquirer.prompt(fighter_choices)['choice']
-            fighter = Fighter.find_by_name(choice)
-
-            delete_fighter(fighter)
+                delete_fighter(fighter)
+            else:
+                print('No fighters to delete')
                 
         elif user_choice == 'Back':
             main()
