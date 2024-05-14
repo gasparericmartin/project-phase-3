@@ -129,26 +129,36 @@ def weight_classes_loop():
             weight_class_by_weight(weight)
                 
         elif user_choice == 'Fighters by Weight Class':
-            weight_class_choices = choices(weight_class_names)
-            choice = inquirer.prompt(weight_class_choices)['choice']
-            weight_class = Weight_class.find_by_name(choice)
+            weight_class_choices = choices(weight_class_names) if weight_class_names() else None
+        
+            if weight_class_choices:
+                choice = inquirer.prompt(weight_class_choices)['choice']
+                weight_class = Weight_class.find_by_name(choice)
 
-            fighters_in_class(weight_class.weight)
-                
+                fighters_in_class(weight_class.weight)
+            else:
+                print('No weight classes to access')
+
         elif user_choice == 'Add Weight Class':
             create_weight_class()
                 
         elif user_choice == 'Update Weight Class':
-            weight_class_choices = choices(weight_class_names)
-                    
-            choice = inquirer.prompt(weight_class_choices)['choice']
-            update_weight_class(choice)
+            weight_class_choices = choices(weight_class_names) if weight_class_names() else None
+
+            if weight_class_choices:
+                choice = inquirer.prompt(weight_class_choices)['choice']
+                update_weight_class(choice)
+            else: 
+                print('No weight classes to update')
                 
         elif user_choice == 'Delete Weight Class':
-            weight_class_choices = choices(weight_class_names)
-                    
-            choice = inquirer.prompt(weight_class_choices)['choice']
-            delete_weight_class(choice)
+            weight_class_choices = choices(weight_class_names) if weight_class_names() else None
+
+            if weight_class_choices:        
+                choice = inquirer.prompt(weight_class_choices)['choice']
+                delete_weight_class(choice)
+            else:
+                print('No weight classes to delete')
                 
         elif user_choice == 'Back':
             main()
@@ -279,4 +289,8 @@ def fights_loop():
 
 
 if __name__ == '__main__':
+    Weight_class.create_table()
+    Fighter.create_table()
+    Fight.create_table()
+    
     main()
