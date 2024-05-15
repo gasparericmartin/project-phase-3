@@ -10,7 +10,7 @@ Clone this repository and save it to your local environment. While in the projec
 
 ## Database
 
-In order to initialize the database run "./seed.py".
+This program works with an empty database, and will create tables on startup if there aren't any present. If you would like to start with a set of data to play around with, run "./seed.py" to seed the database.
 
 ## CLI
 
