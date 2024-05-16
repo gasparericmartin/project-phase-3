@@ -4,7 +4,7 @@ This project consists of a CLI interface which interacts with a relational datab
 
 # Installation
 
-Clone this repository and save it to your local environment. While in the project-phase-3 directory run "pipenv install" to install the dependencies for the project, then run "pyenv" to set up the virtual environment. If permissions are needed, navigate to the "lib" directory and run "chmod +x seed.py cli.py".
+Clone this repository and save it to your local environment. While in the project-phase-3 directory run "pipenv install" to install the dependencies for the project, then run "pipenv shell" to set up the virtual environment. If permissions are needed, navigate to the "lib" directory and run "chmod +x seed.py cli.py".
 
 # Running the Program
 
