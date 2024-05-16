@@ -86,6 +86,9 @@ class Weight_class:
         """
         CURSOR.execute(sql, (self.id,))
         CONN.commit()
+
+        del type(self).all[self.id]
+        self.id = None
     
     @classmethod
     def create(cls, weight, name):
