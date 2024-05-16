@@ -10,11 +10,11 @@ Clone this repository and save it to your local environment. While in the projec
 
 ## Database
 
-This program works with an empty database, and will create tables on startup if there aren't any present. If you would like to start with a set of data to play around with, run "./seed.py" to seed the database.
+This program works with an empty database, and will create tables on startup if there aren't any present. If you would like to start with a set of data to play around with, navigate to the lib directory and run "./seed.py" to seed the database.
 
 ## CLI
 
-run "./cli.py" to execute the command line interface. 
+Navigate to the lib directory and run "./cli.py" to execute the command line interface. 
 
 # Usage
 
