@@ -135,7 +135,8 @@ def weight_classes_loop():
                 choice = inquirer.prompt(weight_class_choices)['choice']
                 weight_class = Weight_class.find_by_name(choice)
 
-                fighters_in_class(weight_class.weight)
+                # fighters_in_class(weight_class)
+                [display_fighter_info(fighter) for fighter in weight_class.all_fighters_in_class()]
             else:
                 print('No weight classes to access')
 
@@ -196,9 +197,9 @@ def fighters_loop():
             if class_choices_in_lbs:
                 print('Choose your fighter\'s weight class')
                 raw_choice = inquirer.prompt(class_choices_in_lbs)['choice']
-                choice = Weight_class.find_by_weight(raw_choice).id
+                w_class = Weight_class.find_by_weight(raw_choice)
 
-                create_fighter(choice)
+                create_fighter(w_class)
             else:
                 create_fighter()
                 

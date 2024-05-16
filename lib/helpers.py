@@ -45,11 +45,10 @@ def weight_class_by_weight(weight):
     except Exception as exc:
         print('There was an error:', exc)
 
-def fighters_in_class(weight):
-    weight_class = Weight_class.find_by_weight(weight)
-    fighters = weight_class.all_fighters_in_class()
+# def fighters_in_class(weight_class):
+#     fighters = weight_class.all_fighters_in_class()
     
-    [display_fighter_info(fighter) for fighter in fighters]
+#     [display_fighter_info(fighter) for fighter in fighters]
 
 def display_fighter_info(fighter):
     if fighter_weight := Weight_class.find_by_id(fighter.weight_class_id):
@@ -87,14 +86,13 @@ def fighter_names():
 
 def fighter_opponents(ftr_name):
     fighter = Fighter.find_by_name(ftr_name)
-    opponents = fighter.opponents()
-    [print(opponent) for opponent in opponents]
+
+    [print(opponent) for opponent in fighter.opponents()]
 
 def fighter_fights(ftr_name):
     fighter = Fighter.find_by_name(ftr_name)
-    fights = fighter.all_fights()
 
-    [display_fight_info(fight) for fight in fights]
+    [display_fight_info(fight) for fight in fighter.all_fights()]
 
 def display_fight_info(fight):
     if fighter_1 := Fighter.find_by_id(fight.ftr_1_id):
@@ -199,23 +197,21 @@ def update_weight_class(class_name):
         print('Weight class not found')
 
 def delete_weight_class(class_name):
-    if w_class := Weight_class.find_by_name(class_name):
-        try:
-            w_class.delete()
-            print('Weight class deleted')
-        except Exception as exc:
-            print('Error deleting weight class', exc)
-    else:
-        print('Weight class not found')
+    w_class = Weight_class.find_by_name(class_name)
+    try:
+        w_class.delete()
+        print('Weight class deleted')
+    except Exception as exc:
+        print('Error deleting weight class', exc)
 
-def create_fighter(weight_class_id_=None):
+def create_fighter(weight_class=None):
     try:
         name_ = input('Input name: ')
         age_ = input('Input age: ')
         wins_ = input('Input wins: ')
         losses_ = input('Input losses: ')
         
-        Fighter.create(name_, age_, weight_class_id_, wins_, losses_)
+        Fighter.create(name_, age_, weight_class.id, wins_, losses_)
         print('New fighter created')
     except Exception as exc:
         print('Error creating fighter', exc)
